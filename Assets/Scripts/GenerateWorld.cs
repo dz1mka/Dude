@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateWorld : MonoBehaviour
 {
-    public GameObject[] platforms;
+    
     GameObject dummyTraveller;
 
     // Start is called before the first frame update
@@ -14,25 +14,30 @@ public class GenerateWorld : MonoBehaviour
         
         for (int i = 0; i < 20; i++)
         {
-            int platformNumber = Random.Range(0, platforms.Length);
-            GameObject p = Instantiate(platforms[platformNumber], 
-            dummyTraveller.transform.position, 
-            dummyTraveller.transform.rotation);
             
+            GameObject p = Pool.singleton.GetRandom();
 
-            if(platforms[platformNumber].gameObject.tag == "stairsUp")
+            if (p == null)
+                return;
+
+            p.SetActive(true);
+            p.transform.position = dummyTraveller.transform.position;
+            p.transform.rotation = dummyTraveller.transform.rotation;
+
+
+            if (p.tag == "stairsUp")
             {
                 dummyTraveller.transform.Translate(0, 5, 0);
             }
 
-            else if (platforms[platformNumber].gameObject.tag == "stairsDown")
+            else if (p.tag == "stairsDown")
             {
                 dummyTraveller.transform.Translate(0, -5, 0);
                 p.transform.Rotate(new Vector3(0, 180, 0));
                 p.transform.position = dummyTraveller.transform.position;
             }
 
-            else if(platforms[platformNumber].gameObject.tag == "platformTSection")
+            else if(p.tag == "platformTSection")
             {
                 if(Random.Range(0,2) == 0)
                     dummyTraveller.transform.Rotate(new Vector3(0, 90, 0));
